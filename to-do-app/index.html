@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-Do App</title>
+  <meta name="description" content="Aplicativo de gerenciamento de tarefas com login, cadastro e dashboard pessoal." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
+          colors: { night: '#0f172a' }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════  AUTH SCREENS  ═══════════════════ -->
+  <div id="auth-container" class="screen flex items-center justify-center min-h-screen p-4">
+
+    <!-- LOGIN -->
+    <div id="login-screen" class="glass rounded-2xl p-8 w-full max-w-md shadow-2xl">
+      <div class="mb-8 text-center">
+        <span class="text-3xl">✅</span>
+        <h1 class="text-2xl font-bold text-white mt-2 tracking-tight">Bem-vindo de volta</h1>
+        <p class="text-slate-400 text-sm mt-1">Faça login para gerenciar suas tarefas</p>
+      </div>
+
+      <form id="form-login" novalidate class="space-y-4">
+        <div>
+          <label for="login-email">E-mail</label>
+          <input id="login-email" type="email" class="input-field" placeholder="seu@email.com" autocomplete="email" />
+          <p id="err-login-email" class="text-red-400 text-xs mt-1 hidden"></p>
+        </div>
+        <div>
+          <label for="login-password">Senha</label>
+          <input id="login-password" type="password" class="input-field" placeholder="••••••••" autocomplete="current-password" />
+          <p id="err-login-password" class="text-red-400 text-xs mt-1 hidden"></p>
+        </div>
+        <p id="err-login-general" class="text-red-400 text-sm text-center hidden"></p>
+        <button type="submit" class="btn-primary mt-2">Entrar</button>
+      </form>
+
+      <p class="text-center text-sm text-slate-400 mt-6">
+        Não tem uma conta?
+        <a href="#" id="go-register" class="text-blue-400 hover:text-blue-300 font-medium transition-colors ml-1">Cadastre-se</a>
+      </p>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="register-screen" class="glass rounded-2xl p-8 w-full max-w-md shadow-2xl hidden">
+      <div class="mb-8 text-center">
+        <span class="text-3xl">🚀</span>
+        <h1 class="text-2xl font-bold text-white mt-2 tracking-tight">Criar Conta</h1>
+        <p class="text-slate-400 text-sm mt-1">Organize sua vida em minutos</p>
+      </div>
+
+      <form id="form-register" novalidate class="space-y-4">
+        <div>
+          <label for="reg-name">Nome</label>
+          <input id="reg-name" type="text" class="input-field" placeholder="Seu nome completo" autocomplete="name" />
+          <p id="err-reg-name" class="text-red-400 text-xs mt-1 hidden"></p>
+        </div>
+        <div>
+          <label for="reg-email">E-mail</label>
+          <input id="reg-email" type="email" class="input-field" placeholder="seu@email.com" autocomplete="email" />
+          <p id="err-reg-email" class="text-red-400 text-xs mt-1 hidden"></p>
+        </div>
+        <div>
+          <label for="reg-password">Senha</label>
+          <input id="reg-password" type="password" class="input-field" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+          <p id="err-reg-password" class="text-red-400 text-xs mt-1 hidden"></p>
+        </div>
+        <p id="err-reg-general" class="text-red-400 text-sm text-center hidden"></p>
+        <button type="submit" class="btn-primary mt-2">Criar Conta</button>
+      </form>
+
+      <p class="text-center text-sm text-slate-400 mt-6">
+        Já tem uma conta?
+        <a href="#" id="go-login" class="text-blue-400 hover:text-blue-300 font-medium transition-colors ml-1">Faça login</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════  DASHBOARD  ═══════════════════ -->
+  <div id="dashboard" class="screen hidden min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="glass border-b border-white/5 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+      <div class="flex items-center gap-3">
+        <span class="text-xl">✅</span>
+        <div>
+          <p class="text-xs text-slate-400 font-medium">Bem-vindo,</p>
+          <h2 id="user-greeting" class="text-white font-semibold text-sm leading-tight">Usuário</h2>
+        </div>
+      </div>
+      <button id="btn-logout" class="btn-secondary">Sair →</button>
+    </header>
+
+    <main class="flex-1 max-w-3xl w-full mx-auto px-4 py-8 space-y-6">
+
+      <!-- FORM NOVA TAREFA -->
+      <section class="glass rounded-2xl p-6 shadow-xl">
+        <h2 class="text-white font-semibold text-base mb-5 flex items-center gap-2">
+          <span class="text-blue-400">＋</span> Nova Tarefa
+        </h2>
+        <form id="form-todo" novalidate class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="sm:col-span-2">
+              <label for="todo-title">Título <span class="text-red-400">*</span></label>
+              <input id="todo-title" type="text" class="input-field" placeholder="O que precisa ser feito?" />
+              <p id="err-todo-title" class="text-red-400 text-xs mt-1 hidden"></p>
+            </div>
+            <div>
+              <label for="todo-type">Tipo</label>
+              <select id="todo-type" class="input-field">
+                <option value="Trabalho">💼 Trabalho</option>
+                <option value="Pessoal">🧘 Pessoal</option>
+                <option value="Estudos">📚 Estudos</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label for="todo-desc">Descrição <span class="text-slate-500 text-xs">(opcional)</span></label>
+            <textarea id="todo-desc" class="input-field resize-none" rows="3" placeholder="Detalhes adicionais..."></textarea>
+          </div>
+          <button type="submit" id="btn-add-todo" class="btn-primary" style="width:auto;padding:0.65rem 2rem;">
+            Adicionar Tarefa
+          </button>
+        </form>
+      </section>
+
+      <!-- LISTA DE TAREFAS -->
+      <section class="glass rounded-2xl p-6 shadow-xl">
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="text-white font-semibold text-base flex items-center gap-2">
+            <span class="text-slate-400">📋</span> Minhas Tarefas
+          </h2>
+          <span id="task-count" class="text-xs text-slate-500"></span>
+        </div>
+        <div id="todo-list" class="space-y-3">
+          <!-- tasks rendered by JS -->
+        </div>
+        <p id="empty-msg" class="text-center text-slate-500 text-sm py-8 hidden">
+          Nenhuma tarefa cadastrada ainda.
+        </p>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
